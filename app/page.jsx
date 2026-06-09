@@ -18,7 +18,7 @@ const COURSES = [
     desc:'Never used AI intentionally? Start here. Six lessons that go from "What is AI?" to using it for something real in your life today.',
     lessons:6, freeCount:2,
     price:'R399', usd:'$22',
-    tags:['No tech needed','Zero code','6 lessons'],
+    tags:['No tech needed','Beginner-friendly','6 sessions'],
     cta:'Start for Free →',
     href:'/learn',
   },
@@ -27,10 +27,10 @@ const COURSES = [
     title:'Claude at Work',
     subtitle:'Professional',
     color:'#3b82f6',
-    desc:'You use AI daily — now learn to build with it. From your first terminal command to a working chatbot connected to the Claude API.',
+    desc:'You use AI daily — now get serious about it. Master prompting patterns, Projects, and the everyday workflows that make Claude an extension of how you work.',
     lessons:10, freeCount:2,
     price:'R599', usd:'$33',
-    tags:['Some setup','Learn to code','10 lessons'],
+    tags:['Hands-on practice','Real workflows','10 sessions'],
     cta:'Start Learning →',
     href:'/learn?course=work',
   },
@@ -39,10 +39,10 @@ const COURSES = [
     title:'Mastering Claude',
     subtitle:'Advanced',
     color:'#ef4444',
-    desc:'Already a developer? Skip the basics and go deep — streaming, tool use, system prompts, production patterns, and a real capstone app.',
+    desc:'Already fluent with Claude? Push further — advanced prompting techniques, multi-step workflows, working with files and long context, and a capstone project that solves a real problem in your life.',
     lessons:16, freeCount:2,
     price:'R999', usd:'$55',
-    tags:['Technical depth','16 lessons','Capstone project'],
+    tags:['Advanced','16 sessions','Capstone project'],
     cta:'Go Deep →',
     href:'/learn?course=advanced',
   },
@@ -74,11 +74,11 @@ export default function LandingPage() {
         <div style={{ position:'absolute', top:'40px', left:'50%', transform:'translateX(-50%)', width:'600px', height:'400px', background:'radial-gradient(ellipse, rgba(245,158,11,0.07) 0%, transparent 70%)', pointerEvents:'none' }} />
         <div style={{ display:'inline-flex', alignItems:'center', gap:'7px', background:'rgba(16,185,129,0.1)', border:'1px solid rgba(16,185,129,0.25)', borderRadius:'20px', padding:'5px 14px', marginBottom:'28px' }}>
           <div style={{ width:'7px', height:'7px', borderRadius:'50%', background:C.green, boxShadow:`0 0 6px ${C.green}` }} />
-          <span style={{ fontSize:'12px', fontWeight:'700', color:C.green, letterSpacing:'0.06em' }}>FIRST 2 LESSONS FREE IN EVERY COURSE</span>
+          <span style={{ fontSize:'12px', fontWeight:'700', color:C.green, letterSpacing:'0.06em' }}>FIRST 2 SESSIONS FREE IN EVERY COURSE</span>
         </div>
-        <h1 style={{ fontFamily:"'Syne',sans-serif", fontSize:'clamp(40px,7vw,78px)', fontWeight:'800', color:C.text, margin:'0 0 8px', letterSpacing:'-2px', lineHeight:1.05 }}>Learn the Claude API.</h1>
-        <h1 style={{ fontFamily:"'Syne',sans-serif", fontSize:'clamp(40px,7vw,78px)', fontWeight:'800', margin:'0 0 24px', letterSpacing:'-2px', lineHeight:1.05, background:`linear-gradient(135deg,${C.amber},${C.orange})`, WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>At your level.</h1>
-        <p style={{ fontSize:'18px', color:C.muted, maxWidth:'500px', margin:'0 auto 40px', lineHeight:'1.7' }}>Three adaptive courses, one AI tutor. Whether you have never written code or you deploy daily — Alex starts where you are.</p>
+        <h1 style={{ fontFamily:"'Syne',sans-serif", fontSize:'clamp(40px,7vw,78px)', fontWeight:'800', color:C.text, margin:'0 0 8px', letterSpacing:'-2px', lineHeight:1.05 }}>Learn Claude.</h1>
+        <h1 style={{ fontFamily:"'Syne',sans-serif", fontSize:'clamp(40px,7vw,78px)', fontWeight:'800', margin:'0 0 24px', letterSpacing:'-2px', lineHeight:1.05, background:`linear-gradient(135deg,${C.amber},${C.orange})`, WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>Taught by Claude.</h1>
+        <p style={{ fontSize:'18px', color:C.muted, maxWidth:'540px', margin:'0 auto 40px', lineHeight:'1.7' }}>Three interactive courses that adapt to your level. Live AI feedback. No videos. No passive reading. Just real practice with Alex, your personal AI tutor.</p>
         <div style={{ display:'flex', gap:'12px', justifyContent:'center', flexWrap:'wrap' }}>
           <button onClick={()=>router.push('/learn')} style={{ background:`linear-gradient(135deg,${C.amber},${C.orange})`, color:'#0f172a', border:'none', padding:'16px 36px', borderRadius:'50px', fontSize:'16px', fontWeight:'700', fontFamily:"'DM Sans',sans-serif", cursor:'pointer', boxShadow:'0 8px 28px rgba(245,158,11,0.4)' }}>Start for Free →</button>
           <a href="#courses" style={{ background:'none', border:`1px solid ${C.border2}`, color:C.muted, padding:'16px 36px', borderRadius:'50px', fontSize:'16px', fontWeight:'600', fontFamily:"'DM Sans',sans-serif", cursor:'pointer', display:'inline-block' }}>See all courses</a>
@@ -88,7 +88,7 @@ export default function LandingPage() {
       {/* Quote */}
       <div style={{ background:'rgba(245,158,11,0.04)', borderTop:'1px solid rgba(245,158,11,0.1)', borderBottom:'1px solid rgba(245,158,11,0.1)', padding:'32px', textAlign:'center' }}>
         <p style={{ fontStyle:'italic', fontSize:'18px', color:C.muted, maxWidth:'600px', margin:'0 auto 10px', lineHeight:'1.7' }}>"Claude is currently the closest thing to a senior-engineer-level AI partner for building complicated apps."</p>
-        <p style={{ fontSize:'12px', fontWeight:'700', letterSpacing:'0.1em', textTransform:'uppercase', color:C.amber }}>Perplexity AI — That's why this course teaches the Claude API, independently ranked the best.</p>
+        <p style={{ fontSize:'12px', fontWeight:'700', letterSpacing:'0.1em', textTransform:'uppercase', color:C.amber }}>Perplexity AI — independently ranked the best. That's why every Alex Tutor session is taught by Claude.</p>
       </div>
 
       {/* Courses */}
@@ -152,8 +152,8 @@ export default function LandingPage() {
       <div style={{ padding:'72px 24px', maxWidth:'700px', margin:'0 auto' }}>
         <h2 style={{ fontFamily:"'Syne',sans-serif", fontSize:'28px', fontWeight:'800', color:C.text, textAlign:'center', marginBottom:'36px', letterSpacing:'-0.5px' }}>Common questions</h2>
         {[
-          { q:'Do I need a computer to code on?', a:'Only for Courses 2 and 3. Course 1 runs entirely in the chat window — no setup whatsoever.' },
-          { q:'Can I really start for free?', a:'Yes. The first two lessons of every course are completely free. No payment needed to try.' },
+          { q:'Do I need anything special to start?', a:'Just a browser. Everything happens in the chat window — no downloads, no installs, no setup.' },
+          { q:'Can I really start for free?', a:'Yes. The first two sessions of every course are completely free. No payment needed to try.' },
           { q:'What if something on my screen looks different?', a:'Just tell Alex. Describe what you see and Alex will walk you through fixing it before continuing.' },
           { q:'Is this South Africa only?', a:'No. The courses work for anyone anywhere. Pricing is shown in both Rands and USD.' },
           { q:'Which AI model does Alex use?', a:'Claude Haiku — the fastest and most affordable Claude model, perfect for real-time tutoring.' },
