@@ -7,6 +7,8 @@ import { C, GLOBAL_CSS } from '@/lib/alex-theme'
 import { sendChat, fetchQuiz, fetchHint } from '@/lib/api-client'
 
 const FREE_SESSIONS = 2
+// ─── TEST FLAG: delete the next line + NEXT_PUBLIC_FORCE_PAYWALL env var when done ───
+const FORCE_PAYWALL = process.env.NEXT_PUBLIC_FORCE_PAYWALL === 'true'
 import AlexAvatar from '@/components/AlexAvatar'
 import Spinner from '@/components/Spinner'
 import MessageBubble from '@/components/MessageBubble'
@@ -339,7 +341,7 @@ export default function TutorApp({
   const course = COURSES[courseId]
   const session = course.sessions[currentSession - 1]
   const hasPurchased = purchasedCourses.includes(courseId)
-  const isPaywalled = mode === 'teaching' && !hasPurchased && currentSession > FREE_SESSIONS
+  const isPaywalled = mode === 'teaching' && (FORCE_PAYWALL || (!hasPurchased && currentSession > FREE_SESSIONS))
 
   if (!firstName) {
     return (
