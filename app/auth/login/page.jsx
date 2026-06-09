@@ -32,7 +32,7 @@ function LoginForm() {
         options: { emailRedirectTo: `${window.location.origin}/auth/callback?next=${redirect}` }
       })
       if (error) setError(error.message)
-      else setMessage('Check your email to confirm your account, then come back to sign in.')
+      else setMessage('Almost there! Check your inbox for a confirmation email from Alex Tutor — it will arrive from a Supabase address on our behalf. Click the link, then come back here to sign in.')
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
       if (error) setError(error.message)

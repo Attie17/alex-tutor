@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { createClient, getCompletedSessions, getMessages } from '@/lib/supabase-server'
+import { createClient, getCompletedSessions, getMessages, getUserPurchases } from '@/lib/supabase-server'
 import { COURSES } from '@/lib/courses'
 import TutorApp from './TutorApp'
 
@@ -22,10 +22,11 @@ export default async function LearnPage({ searchParams }) {
     : (VALID_COURSES.has(recommended) ? recommended : 'beginner')
 
   // Completed sessions for all three courses — needed by the sidebar.
-  const [beginnerDone, workDone, advancedDone] = await Promise.all([
+  const [beginnerDone, workDone, advancedDone, purchases] = await Promise.all([
     getCompletedSessions(user.id, 'beginner'),
     getCompletedSessions(user.id, 'work'),
     getCompletedSessions(user.id, 'advanced'),
+    getUserPurchases(user.id),
   ])
   const initialCompletedByAll = { beginner: beginnerDone, work: workDone, advanced: advancedDone }
 
@@ -53,6 +54,7 @@ export default async function LearnPage({ searchParams }) {
       initialMode={isOnboarding ? 'onboarding' : 'teaching'}
       initialMessages={initialMessages}
       initialCompletedByAll={initialCompletedByAll}
+      purchasedCourses={purchases}
     />
   )
 }

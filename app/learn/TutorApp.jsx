@@ -5,6 +5,8 @@ import { createClient } from '@/lib/supabase'
 import { COURSES, STUCK_WORDS } from '@/lib/courses'
 import { C, GLOBAL_CSS } from '@/lib/alex-theme'
 import { sendChat, fetchQuiz, fetchHint } from '@/lib/api-client'
+
+const FREE_SESSIONS = 2
 import AlexAvatar from '@/components/AlexAvatar'
 import Spinner from '@/components/Spinner'
 import MessageBubble from '@/components/MessageBubble'
@@ -19,6 +21,7 @@ export default function TutorApp({
   initialMode,
   initialMessages,
   initialCompletedByAll,
+  purchasedCourses = [],
 }) {
   const supabase = createClient()
   const router = useRouter()
@@ -48,6 +51,7 @@ export default function TutorApp({
   const [quiz, setQuiz] = useState(null)
   const [quizLoading, setQuizLoading] = useState(false)
   const [stuckDetected, setStuckDetected] = useState(false)
+  const [buyLoading, setBuyLoading] = useState(false)
 
   const chatEndRef = useRef(null)
   const inputRef = useRef(null)
@@ -267,6 +271,36 @@ export default function TutorApp({
     window.location.href = '/auth/login?redirect=/learn'
   }
 
+  async function handleBuy() {
+    if (buyLoading) return
+    setBuyLoading(true)
+    try {
+      const res = await fetch('/api/payfast/initiate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ courseId }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Payment initiation failed')
+      // Build and submit the PayFast form
+      const form = document.createElement('form')
+      form.method = 'POST'
+      form.action = data.payfastUrl
+      Object.entries(data.fields).forEach(([k, v]) => {
+        const input = document.createElement('input')
+        input.type = 'hidden'
+        input.name = k
+        input.value = v
+        form.appendChild(input)
+      })
+      document.body.appendChild(form)
+      form.submit()
+    } catch (e) {
+      console.error('Buy error:', e)
+      setBuyLoading(false)
+    }
+  }
+
   async function selectCourse(newCourseId) {
     if (newCourseId === courseId && mode !== 'onboarding') return
     setCourseId(newCourseId)
@@ -304,6 +338,8 @@ export default function TutorApp({
 
   const course = COURSES[courseId]
   const session = course.sessions[currentSession - 1]
+  const hasPurchased = purchasedCourses.includes(courseId)
+  const isPaywalled = mode === 'teaching' && !hasPurchased && currentSession > FREE_SESSIONS
 
   if (!firstName) {
     return (
@@ -372,6 +408,40 @@ export default function TutorApp({
 
           {/* Chat area */}
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+
+            {/* Paywall gate */}
+            {isPaywalled ? (
+              <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 24px' }}>
+                <div style={{ maxWidth: 460, width: '100%', textAlign: 'center', animation: 'fadeUp .3s ease both' }}>
+                  <div style={{ fontSize: 52, marginBottom: 16 }}>🔒</div>
+                  <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 26, fontWeight: 800, color: C.text, margin: '0 0 10px' }}>
+                    You've finished your free sessions!
+                  </h2>
+                  <p style={{ fontSize: 15, color: C.muted, lineHeight: 1.7, margin: '0 0 8px' }}>
+                    You've completed the first {FREE_SESSIONS} free sessions of <strong style={{ color: C.text }}>{course.title}</strong>.
+                  </p>
+                  <p style={{ fontSize: 14, color: C.dim, lineHeight: 1.7, margin: '0 0 28px' }}>
+                    Unlock all {course.sessions.length} sessions to continue your journey with Alex.
+                  </p>
+                  <div style={{ background: C.surface, border: `1px solid rgba(245,158,11,0.25)`, borderRadius: 16, padding: '24px', marginBottom: 24 }}>
+                    <div style={{ fontSize: 13, color: C.dim, marginBottom: 6 }}>Full course access</div>
+                    <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 36, fontWeight: 800, color: C.accent, marginBottom: 4 }}>
+                      R{course.priceZAR}
+                    </div>
+                    <div style={{ fontSize: 12, color: C.dim }}>{course.sessions.length} sessions · Lifetime access</div>
+                  </div>
+                  <button
+                    onClick={handleBuy}
+                    disabled={buyLoading}
+                    style={{ width: '100%', padding: '14px 24px', background: buyLoading ? C.border : `linear-gradient(135deg, ${C.accent}, ${C.accent2})`, color: buyLoading ? C.dim : C.bg, border: 'none', borderRadius: 12, fontSize: 16, fontWeight: 700, cursor: buyLoading ? 'not-allowed' : 'pointer', fontFamily: "'DM Sans', sans-serif", transition: 'all 0.2s', marginBottom: 12 }}
+                  >
+                    {buyLoading ? 'Redirecting to PayFast…' : `Unlock Full Course →`}
+                  </button>
+                  <p style={{ fontSize: 11, color: C.dim }}>Secure payment via PayFast · South Africa</p>
+                </div>
+              </div>
+            ) : (
+            <>
             {/* Messages */}
             <div style={{ flex: 1, overflowY: 'auto', padding: '20px 20px 8px' }}>
               <div style={{ maxWidth: 680, margin: '0 auto' }}>
@@ -421,6 +491,7 @@ export default function TutorApp({
                 <div style={{ textAlign: 'center', marginTop: 5, fontSize: 11, color: C.dim }}>Shift+Enter for new line · Enter to send</div>
               </div>
             </div>
+            </>)} {/* end paywall conditional */}
           </div>
         </div>
       </div>
