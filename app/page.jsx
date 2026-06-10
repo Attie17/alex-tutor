@@ -195,8 +195,7 @@ export default function LandingPage() {
       {/* Footer */}
       <div style={{ borderTop:`1px solid ${C.border}`, padding:'28px 32px', display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:'12px' }}>
         <div style={{ display:'flex', alignItems:'center', gap:'8px' }}>
-          <span style={{ fontSize:'18px' }}>🤖</span>
-          <span style={{ fontFamily:"'Syne',sans-serif", fontSize:'15px', fontWeight:'800', color:C.amber }}>Alex Tutor</span>
+          <img src="/alex-logo.png" alt="Alex Tutor" style={{ height:'28px', width:'auto' }} />
         </div>
         <div style={{ fontSize:'12px', color:C.dimmer }}>Powered by Claude Haiku · Anthropic</div>
         <div style={{ fontSize:'12px', color:C.dimmer }}>© 2026 Maranata Ventures</div>
