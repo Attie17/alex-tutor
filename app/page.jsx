@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
 const C = {
@@ -50,24 +50,45 @@ const COURSES = [
 
 export default function LandingPage() {
   const [hovered, setHovered] = useState(null)
+  const [installPrompt, setInstallPrompt] = useState(null)
+  const [installed, setInstalled] = useState(false)
   const router = useRouter()
+
+  useEffect(() => {
+    const handler = (e) => { e.preventDefault(); setInstallPrompt(e) }
+    window.addEventListener('beforeinstallprompt', handler)
+    window.addEventListener('appinstalled', () => setInstalled(true))
+    return () => window.removeEventListener('beforeinstallprompt', handler)
+  }, [])
+
+  async function handleInstall() {
+    if (!installPrompt) return
+    installPrompt.prompt()
+    const { outcome } = await installPrompt.userChoice
+    if (outcome === 'accepted') setInstalled(true)
+    setInstallPrompt(null)
+  }
 
   return (
     <div style={{ background:C.bg, minHeight:'100vh', fontFamily:"'DM Sans',sans-serif", overflowX:'hidden' }}>
 
       {/* Nav */}
-      <nav style={{ position:'sticky', top:0, zIndex:100, background:'rgba(10,15,26,0.92)', backdropFilter:'blur(12px)', borderBottom:`1px solid ${C.border}`, padding:'0 32px', height:'56px', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-        <div style={{ display:'flex', alignItems:'center', gap:'10px' }}>
+      <nav style={{ position:'sticky', top:0, zIndex:100, background:'rgba(10,15,26,0.92)', backdropFilter:'blur(12px)', borderBottom:`1px solid ${C.border}`, padding:'0 20px', height:'56px', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+        <div style={{ display:'flex', alignItems:'center', gap:'8px' }}>
           <span style={{ fontSize:'22px' }}>🤖</span>
           <span style={{ fontFamily:"'Syne',sans-serif", fontSize:'18px', fontWeight:'800', color:C.amber, letterSpacing:'-0.5px' }}>Alex</span>
           <span style={{ fontSize:'11px', color:C.dim, fontWeight:'600', letterSpacing:'0.06em', textTransform:'uppercase' }}>Tutor</span>
         </div>
-        <div style={{ display:'flex', alignItems:'center', gap:'12px' }}>
-          <a href="#courses" style={{ fontSize:'13px', color:C.muted, fontWeight:'500' }}>Courses</a>
-          <a href="#how" style={{ fontSize:'13px', color:C.muted, fontWeight:'500' }}>How it works</a>
-          <button onClick={()=>router.push('/auth/login')} style={{ background:'none', border:`1px solid ${C.border2}`, color:C.muted, padding:'7px 16px', borderRadius:'8px', fontSize:'13px', cursor:'pointer', fontFamily:"'DM Sans',sans-serif", fontWeight:'500' }}>Sign In</button>
+        {/* Desktop nav links — hidden on small screens via CSS class */}
+        <div className="nav-links" style={{ display:'flex', alignItems:'center', gap:'16px' }}>
+          <a href="#courses" style={{ fontSize:'13px', color:C.muted, fontWeight:'500', textDecoration:'none' }}>Courses</a>
+          <a href="#how" style={{ fontSize:'13px', color:C.muted, fontWeight:'500', textDecoration:'none' }}>How it works</a>
         </div>
+        <button onClick={()=>router.push('/auth/login')} style={{ background:`linear-gradient(135deg,${C.amber},${C.orange})`, border:'none', color:'#0f172a', padding:'9px 20px', borderRadius:'8px', fontSize:'13px', cursor:'pointer', fontFamily:"'DM Sans',sans-serif", fontWeight:'700', whiteSpace:'nowrap' }}>Sign In</button>
       </nav>
+      <style>{`
+        @media (max-width: 480px) { .nav-links { display: none !important; } }
+      `}</style>
 
       {/* Hero */}
       <div style={{ padding:'90px 32px 70px', maxWidth:'900px', margin:'0 auto', textAlign:'center', position:'relative' }}>
@@ -81,8 +102,16 @@ export default function LandingPage() {
         <p style={{ fontSize:'18px', color:C.muted, maxWidth:'540px', margin:'0 auto 40px', lineHeight:'1.7' }}>Three interactive courses that adapt to your level. Live AI feedback. No videos. No passive reading. Just real practice with Alex, your personal AI tutor.</p>
         <div style={{ display:'flex', gap:'12px', justifyContent:'center', flexWrap:'wrap' }}>
           <button onClick={()=>router.push('/learn')} style={{ background:`linear-gradient(135deg,${C.amber},${C.orange})`, color:'#0f172a', border:'none', padding:'16px 36px', borderRadius:'50px', fontSize:'16px', fontWeight:'700', fontFamily:"'DM Sans',sans-serif", cursor:'pointer', boxShadow:'0 8px 28px rgba(245,158,11,0.4)' }}>Start for Free →</button>
-          <a href="#courses" style={{ background:'none', border:`1px solid ${C.border2}`, color:C.muted, padding:'16px 36px', borderRadius:'50px', fontSize:'16px', fontWeight:'600', fontFamily:"'DM Sans',sans-serif", cursor:'pointer', display:'inline-block' }}>See all courses</a>
+          <a href="#courses" style={{ background:'none', border:`1px solid ${C.border2}`, color:C.muted, padding:'16px 36px', borderRadius:'50px', fontSize:'16px', fontWeight:'600', fontFamily:"'DM Sans',sans-serif", cursor:'pointer', display:'inline-block', textDecoration:'none' }}>See all courses</a>
+          {installPrompt && !installed && (
+            <button onClick={handleInstall} style={{ background:'none', border:`1px solid ${C.green}`, color:C.green, padding:'16px 28px', borderRadius:'50px', fontSize:'15px', fontWeight:'600', fontFamily:"'DM Sans',sans-serif", cursor:'pointer', display:'inline-flex', alignItems:'center', gap:'8px' }}>
+              📲 Add to Home Screen
+            </button>
+          )}
         </div>
+        {installed && (
+          <p style={{ marginTop:'16px', fontSize:'13px', color:C.green }}>✓ Alex Tutor added to your home screen!</p>
+        )}
       </div>
 
       {/* Quote */}
