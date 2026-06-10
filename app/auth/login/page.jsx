@@ -48,8 +48,7 @@ function LoginForm() {
 
       {/* Logo */}
       <div style={{ textAlign:'center', marginBottom:'32px' }}>
-        <div style={{ fontSize:'52px', marginBottom:'12px', animation:'float 3s ease-in-out infinite' }}>🤖</div>
-        <h1 style={{ fontFamily:"'Syne',sans-serif", fontSize:'28px', fontWeight:'800', color:C.text, letterSpacing:'-1px', marginBottom:'6px' }}>Alex Tutor</h1>
+        <img src="/alex-logo.png" alt="Alex Tutor" style={{ height:'72px', width:'auto', marginBottom:'12px' }} />
         <p style={{ fontSize:'14px', color:C.dim }}>Sign in to continue your learning journey</p>
       </div>
 
