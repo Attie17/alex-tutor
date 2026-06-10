@@ -73,6 +73,39 @@ export default function TutorApp({
     startOnboarding()
   }, [firstName, mode, messages.length])
 
+  // If a returning user lands in teaching mode with no messages (e.g. their
+  // recommended_course was set but chat was cleared), kick off the first session.
+  const teachingStarted = useRef(false)
+  useEffect(() => {
+    if (!firstName) return
+    if (mode !== 'teaching') return
+    if (messages.length > 0) return
+    if (teachingStarted.current) return
+    teachingStarted.current = true
+    startTeaching()
+  }, [firstName, mode, messages.length])
+
+  async function startTeaching() {
+    const sess = COURSES[courseId]?.sessions[currentSession - 1]
+    if (!sess) return
+    setLoading(true)
+    try {
+      const text = await sendChat({
+        messages: [{ role: 'user', content: `Let's start Session ${currentSession}: ${sess.title}.` }],
+        courseId,
+        sessionId: currentSession,
+        mode: 'teaching',
+      })
+      setMessages([{ role: 'assistant', content: text }])
+    } catch (e) {
+      if (e.status === 401) { router.push('/auth/login?redirect=/learn'); return }
+      console.error(e)
+    } finally {
+      setLoading(false)
+      setTimeout(() => inputRef.current?.focus(), 100)
+    }
+  }
+
   async function startOnboarding() {
     setLoading(true)
     try {

@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient, getCompletedSessions, getMessages, getUserPurchases } from '@/lib/supabase-server'
 import { COURSES } from '@/lib/courses'
+import { log, warn } from '@/lib/logger'
 import TutorApp from './TutorApp'
 
 export const dynamic = 'force-dynamic'
@@ -39,6 +40,31 @@ export default async function LearnPage({ searchParams }) {
   }
 
   const hasAnyProgress = Object.values(initialCompletedByAll).some(arr => arr.length > 0)
+  const isOnboarding = !hasAnyProgress && !recommended && !requested
+
+  // Log every learn-page load so we can diagnose routing issues
+  await log('learn.page.load', {
+    user_id: user.id,
+    email: user.email,
+    courseId,
+    currentSession,
+    isOnboarding,
+    hasAnyProgress,
+    recommended_course: recommended ?? null,
+    requested_course: requested ?? null,
+    completed_beginner: beginnerDone.length,
+    completed_work: workDone.length,
+    completed_advanced: advancedDone.length,
+  })
+
+  if (!isOnboarding && !hasAnyProgress && recommended) {
+    await warn('learn.page.skip_onboarding', {
+      user_id: user.id,
+      email: user.email,
+      reason: 'recommended_course set but no progress — user bypassed onboarding',
+      recommended_course: recommended,
+    })
+  }
   const isOnboarding = !hasAnyProgress && !recommended && !requested
 
   const initialMessages = isOnboarding
