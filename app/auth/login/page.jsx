@@ -20,7 +20,7 @@ function LoginForm() {
   const [showPw, setShowPw]     = useState(false)
   const router       = useRouter()
   const searchParams = useSearchParams()
-  const redirect     = searchParams.get('redirect') || '/'
+  const redirect     = searchParams.get('redirect') || '/learn'
   const supabase     = createClient()
 
   const handleSubmit = async () => {

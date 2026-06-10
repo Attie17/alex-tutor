@@ -82,7 +82,7 @@ export default function LandingPage() {
           <a href="#courses" style={{ fontSize:'13px', color:C.muted, fontWeight:'500', textDecoration:'none' }}>Courses</a>
           <a href="#how" style={{ fontSize:'13px', color:C.muted, fontWeight:'500', textDecoration:'none' }}>How it works</a>
         </div>
-        <button onClick={()=>router.push('/auth/login')} style={{ background:`linear-gradient(135deg,${C.amber},${C.orange})`, border:'none', color:'#0f172a', padding:'9px 20px', borderRadius:'8px', fontSize:'13px', cursor:'pointer', fontFamily:"'DM Sans',sans-serif", fontWeight:'700', whiteSpace:'nowrap' }}>Sign In</button>
+        <button onClick={()=>router.push('/auth/login?redirect=/learn')} style={{ background:`linear-gradient(135deg,${C.amber},${C.orange})`, border:'none', color:'#0f172a', padding:'9px 20px', borderRadius:'8px', fontSize:'13px', cursor:'pointer', fontFamily:"'DM Sans',sans-serif", fontWeight:'700', whiteSpace:'nowrap' }}>Sign In</button>
       </nav>
       <style>{`
         @media (max-width: 480px) { .nav-links { display: none !important; } }
@@ -144,7 +144,7 @@ export default function LandingPage() {
                 <span style={{ fontSize:'13px', color:C.dim }}>{course.usd}</span>
                 <span style={{ fontSize:'12px', color:C.dim, marginLeft:'4px' }}>once-off</span>
               </div>
-              <button onClick={()=>router.push(course.href)} style={{ width:'100%', background:hovered===course.id?`linear-gradient(135deg,${course.color},${C.amber})`:'#1e293b', border:`1px solid ${hovered===course.id?course.color:C.border2}`, color:hovered===course.id?'#0f172a':C.muted, padding:'13px', borderRadius:'12px', fontSize:'14px', fontWeight:'700', fontFamily:"'DM Sans',sans-serif", cursor:'pointer', transition:'all 0.25s' }}>
+              <button onClick={()=>router.push(`/auth/login?redirect=${encodeURIComponent(course.href)}`)} style={{ width:'100%', background:hovered===course.id?`linear-gradient(135deg,${course.color},${C.amber})`:'#1e293b', border:`1px solid ${hovered===course.id?course.color:C.border2}`, color:hovered===course.id?'#0f172a':C.muted, padding:'13px', borderRadius:'12px', fontSize:'14px', fontWeight:'700', fontFamily:"'DM Sans',sans-serif", cursor:'pointer', transition:'all 0.25s' }}>
                 {course.cta}
               </button>
             </div>
