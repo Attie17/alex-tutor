@@ -73,9 +73,9 @@ export default function LandingPage() {
     <div style={{ background:C.bg, minHeight:'100vh', fontFamily:"'DM Sans',sans-serif", overflowX:'hidden' }}>
 
       {/* Nav */}
-      <nav style={{ position:'sticky', top:0, zIndex:100, background:'rgba(10,15,26,0.92)', backdropFilter:'blur(12px)', borderBottom:`1px solid ${C.border}`, padding:'0 20px', height:'56px', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+      <nav style={{ position:'sticky', top:0, zIndex:100, background:'rgba(10,15,26,0.92)', backdropFilter:'blur(12px)', borderBottom:`1px solid ${C.border}`, padding:'0 20px', height:'64px', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
         <div style={{ display:'flex', alignItems:'center', gap:'8px' }}>
-          <img src="/alex-logo.png" alt="Alex" style={{ height:'34px', width:'auto' }} />
+          <img src="/alex-logo.png" alt="Alex" style={{ height:'46px', width:'auto' }} />
         </div>
         {/* Desktop nav links — hidden on small screens via CSS class */}
         <div className="nav-links" style={{ display:'flex', alignItems:'center', gap:'16px' }}>
